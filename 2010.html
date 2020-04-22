@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="css/bootstrap.css" type="text/css">
+<script type="text/javascript" src="d3-3.0.0/d3.min.js">
+</script>
+</head>
+
+  <style>
+                .line{fill:none; stroke:rgb(194, 132, 16); stroke-width:1.5px}
+                
+                .axis {
+                    font: 10px sans-serif;
+                    }
+                    .axis path,
+                    .axis line {
+                    fill: none;
+                    stroke: #0000CD;
+                    shape-rendering: crispEdges;
+                    }
+                </style>
+<body>
+    <div>
+        <h4>TAUX DE LA MORTALITE INFANTILE DANS LES PAYS DE LA CEDEAO </h4>
+        <form name="annees">
+            <label>ANNEES:</label>
+            <select name="choix" onchange="macourbe()">
+            <option>selectionner une annee</option>
+            <option value="1990.html">1990</option>
+            <option value="1995.html">1995</option>
+            <option value="2000.html">2000</option>
+            <option value="2005.html">2005</option>
+            <option value="2010.html">2010</option>
+            <option value="2012.html">2012</option>
+            </select>
+        </form>
+                    
+    </div>
+    <svg id="courbe" width="1000" height="300"></svg>
+        
+    <script>
+        function macourbe() {
+            i = document.annees.choix.selectedIndex;
+            if (i == 0) return;
+            url = document.annees.choix.options[i].value;
+            parent.location.href = url;
+        };
+var data =[{"pays":1,"valeur":33},
+           {"pays":2,"valeur":72}, 
+           {"pays":3,"valeur":0},
+           {"pays":4,"valeur":74},
+           {"pays":5,"valeur":5},
+           {"pays":6,"valeur":58},
+           {"pays":7,"valeur":43},
+           {"pays":8,"valeur":8},
+           {"pays":9,"valeur":12},
+           {"pays":10,"valeur":85},
+           {"pays":11,"valeur":94},
+           {"pays":12,"valeur":832},
+           {"pays":13,"valeur":32},
+           {"pays":14,"valeur":41},
+           {"pays":15,"valeur":23}
+];			
+ console.log(data);
+
+
+
+
+
+
+var margin = { top: 20, right: 20, bottom: 30, left: 50 },
+        width = 600 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+   
+
+    var x = d3.scale.linear()
+        .range([0, width]);
+
+    var y = d3.scale.linear()
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var line = d3.svg.line()
+        .x(function (d) { return x(d.pays); })
+        .y(function (d) { return y(d.valeur); });
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+console.log("here");
+
+        data.forEach(function (d)
+        {
+            d.pays = +d.pays.toString();
+            d.valeur = +d.valeur;
+        });
+
+console.log("here2");
+
+        x.domain(d3.extent(data, function (d) { return d.pays; }));
+        y.domain(d3.extent(data, function (d) { return d.valeur; }));
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            
+
+        svg.append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("d", line);
+    
+</script>
+</body>
+</html>
